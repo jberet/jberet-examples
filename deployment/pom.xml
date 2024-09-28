@@ -21,6 +21,11 @@
         <resteasy.ver>6.2.10.Final</resteasy.ver>
         <jakarta.servlet.ver>6.1.0</jakarta.servlet.ver>
         <version.rest-assured>5.5.0</version.rest-assured>
+        <jboss.home>${project.build.directory}${file.separator}wildfly</jboss.home>
+        <wildfly.version>33.0.2.Final</wildfly.version>
+        <server.test.feature.pack.groupId>org.wildfly</server.test.feature.pack.groupId>
+        <server.test.feature.pack.artifactId>wildfly-ee-galleon-pack</server.test.feature.pack.artifactId>
+        <galleon.fork.embedded>true</galleon.fork.embedded>
     </properties>
 
     <dependencies>
@@ -80,11 +85,56 @@
                 <version>${version.maven.wildfly.plugin}</version>
                 <configuration>
                     <galleon-options>
-                        <galleon.offline>false</galleon.offline>
+<!--                        <galleon.offline>false</galleon.offline>-->
                         <jboss-fork-embedded>true</jboss-fork-embedded>
                     </galleon-options>
                 </configuration>
                 <executions>
+                    <execution>
+                        <id>server-provisioning</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>provision</goal>
+                        </goals>
+                        <configuration>
+                            <provisioning-dir>${jboss.home}</provisioning-dir>
+                            <galleon-options>
+                                <jboss-fork-embedded>${galleon.fork.embedded}</jboss-fork-embedded>
+                            </galleon-options>
+                            <feature-packs>
+                                <feature-pack>
+                                    <groupId>${server.test.feature.pack.groupId}</groupId>
+                                    <artifactId>${server.test.feature.pack.artifactId}</artifactId>
+                                    <version>${wildfly.version}</version>
+                                    <inherit-configs>false</inherit-configs>
+                                    <included-configs>
+                                        <config>
+                                            <model>standalone</model>
+                                            <name>standalone-full.xml</name>
+                                        </config>
+                                        <config>
+                                            <model>standalone</model>
+                                            <name>standalone.xml</name>
+                                        </config>
+                                    </included-configs>
+                                    <excluded-packages>
+                                        <name>docs.schema</name>
+                                        <name>appclient</name>
+                                        <name>domain</name>
+                                    </excluded-packages>
+                                </feature-pack>
+                            </feature-packs>
+                            <channels>
+                                <channel>
+                                    <manifest>
+                                        <groupId>org.jberet</groupId>
+                                        <artifactId>jberet-channel-manifest</artifactId>
+                                        <version>${version.jberet}</version>
+                                    </manifest>
+                                </channel>
+                            </channels>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>wildfly-start</id>
                         <phase>pre-integration-test</phase>
