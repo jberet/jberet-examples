@@ -84,10 +84,42 @@
                 <artifactId>wildfly-maven-plugin</artifactId>
                 <version>${version.maven.wildfly.plugin}</version>
                 <configuration>
+                    <provisioning-dir>${jboss.home}</provisioning-dir>
                     <galleon-options>
-<!--                        <galleon.offline>false</galleon.offline>-->
-                        <jboss-fork-embedded>true</jboss-fork-embedded>
+                        <jboss-fork-embedded>${galleon.fork.embedded}</jboss-fork-embedded>
                     </galleon-options>
+                    <feature-packs>
+                        <feature-pack>
+                            <groupId>${server.test.feature.pack.groupId}</groupId>
+                            <artifactId>${server.test.feature.pack.artifactId}</artifactId>
+                            <version>${wildfly.version}</version>
+                            <inherit-configs>false</inherit-configs>
+                            <included-configs>
+                                <config>
+                                    <model>standalone</model>
+                                    <name>standalone-full.xml</name>
+                                </config>
+                                <config>
+                                    <model>standalone</model>
+                                    <name>standalone.xml</name>
+                                </config>
+                            </included-configs>
+                            <excluded-packages>
+                                <name>docs.schema</name>
+                                <name>appclient</name>
+                                <name>domain</name>
+                            </excluded-packages>
+                        </feature-pack>
+                    </feature-packs>
+                    <channels>
+                        <channel>
+                            <manifest>
+                                <groupId>org.jberet</groupId>
+                                <artifactId>jberet-channel-manifest</artifactId>
+                                <version>${version.jberet}</version>
+                            </manifest>
+                        </channel>
+                    </channels>
                 </configuration>
                 <executions>
                     <execution>
@@ -96,44 +128,6 @@
                         <goals>
                             <goal>provision</goal>
                         </goals>
-                        <configuration>
-                            <provisioning-dir>${jboss.home}</provisioning-dir>
-                            <galleon-options>
-                                <jboss-fork-embedded>${galleon.fork.embedded}</jboss-fork-embedded>
-                            </galleon-options>
-                            <feature-packs>
-                                <feature-pack>
-                                    <groupId>${server.test.feature.pack.groupId}</groupId>
-                                    <artifactId>${server.test.feature.pack.artifactId}</artifactId>
-                                    <version>${wildfly.version}</version>
-                                    <inherit-configs>false</inherit-configs>
-                                    <included-configs>
-                                        <config>
-                                            <model>standalone</model>
-                                            <name>standalone-full.xml</name>
-                                        </config>
-                                        <config>
-                                            <model>standalone</model>
-                                            <name>standalone.xml</name>
-                                        </config>
-                                    </included-configs>
-                                    <excluded-packages>
-                                        <name>docs.schema</name>
-                                        <name>appclient</name>
-                                        <name>domain</name>
-                                    </excluded-packages>
-                                </feature-pack>
-                            </feature-packs>
-                            <channels>
-                                <channel>
-                                    <manifest>
-                                        <groupId>org.jberet</groupId>
-                                        <artifactId>jberet-channel-manifest</artifactId>
-                                        <version>${version.jberet}</version>
-                                    </manifest>
-                                </channel>
-                            </channels>
-                        </configuration>
                     </execution>
                     <execution>
                         <id>wildfly-start</id>
