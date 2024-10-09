@@ -130,6 +130,18 @@
                         </goals>
                     </execution>
                     <execution>
+                        <id>deploy-postgresql</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>deploy-artifact</goal>
+                        </goals>
+                        <configuration>
+                            <groupId>postgresql</groupId>
+                            <artifactId>postgresql</artifactId>
+                            <name>postgresql.jar</name>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>wildfly-start</id>
                         <phase>pre-integration-test</phase>
                         <goals>
