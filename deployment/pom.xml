@@ -125,7 +125,8 @@
                     <layers>
                         <!-- Base layer -->
 <!--                        <layer>jaxrs-server</layer>-->
-                        <layer>postgresql-driver</layer>
+<!--                        <layer>postgresql-driver</layer>-->
+                        <layer>postgresql-datasource</layer>
                     </layers>
                     <channels>
                         <channel>
