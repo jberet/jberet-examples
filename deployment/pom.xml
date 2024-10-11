@@ -115,7 +115,7 @@
                         </feature-pack>
                     </feature-packs>
                     <layers>
-                        <layer>postgresql-datasource</layer>
+                        <layer>postgresql-driver</layer>
                     </layers>
                     <channels>
                         <channel>
