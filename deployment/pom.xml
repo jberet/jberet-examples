@@ -85,11 +85,6 @@
                 <version>${version.maven.wildfly.plugin}</version>
                 <configuration>
                     <provisioning-dir>${jboss.home}</provisioning-dir>
-<!--                    <systemProperties>-->
-<!--                        <POSTGRESQL_DATABASE>batchdb</POSTGRESQL_DATABASE>-->
-<!--                        <POSTGRESQL_PASSWORD>123</POSTGRESQL_PASSWORD>-->
-<!--                        <POSTGRESQL_USER>batchuser</POSTGRESQL_USER>-->
-<!--                    </systemProperties>-->
                     <galleon-options>
                         <jboss-fork-embedded>${galleon.fork.embedded}</jboss-fork-embedded>
                     </galleon-options>
@@ -115,17 +110,11 @@
                                 <name>domain</name>
                             </excluded-packages>
                         </feature-pack>
-<!--                        <feature-pack>-->
-<!--                            <location>org.wildfly:wildfly-galleon-pack:27.0.0.Final</location>-->
-<!--                        </feature-pack>-->
                         <feature-pack>
                             <location>org.wildfly:wildfly-datasources-galleon-pack:3.0.0.Final</location>
                         </feature-pack>
                     </feature-packs>
                     <layers>
-                        <!-- Base layer -->
-<!--                        <layer>jaxrs-server</layer>-->
-<!--                        <layer>postgresql-driver</layer>-->
                         <layer>postgresql-datasource</layer>
                     </layers>
                     <channels>
@@ -146,18 +135,6 @@
                             <goal>provision</goal>
                         </goals>
                     </execution>
-<!--                    <execution>-->
-<!--                        <id>deploy-postgresql</id>-->
-<!--                        <phase>package</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>deploy-artifact</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <groupId>postgresql</groupId>-->
-<!--                            <artifactId>postgresql</artifactId>-->
-<!--                            <name>postgresql.jar</name>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
                     <execution>
                         <id>wildfly-start</id>
                         <phase>pre-integration-test</phase>
