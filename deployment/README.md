@@ -1,10 +1,8 @@
 If you want to run the provided WildFly server manually, run with this command:
 
 ```bash
-$ mvn wildfly:run
+$ mvn wildfly:dev
 ```
-
-And after the WildFly server is started, you can use the `setup-server.sh` to configure the WildFly server to use the JDBC repository for the `batch-jberet` subsystem of WildFly.
 
 ## Using the PostgreSQL database as the job repository.
 
@@ -20,23 +18,12 @@ postgres=# create database batch_db owner batch_user;
 CREATE DATABASE
 ```
 
-And after the WildFly server is started as described above, run the `setup-server-postgresql.sh` script to setup the datasource in WildFly server. Here is the output of the script:
-
+### Using Docker or Podman
 ```bash
-$ ./setup-server-postgrsql.sh
-+ JBOSS_HOME=target/wildfly
-+ target/wildfly/bin/add-user.sh -u admin -p admin
-Updated user 'admin' to file '/Users/weli/works/jberet-examples/deployment/target/wildfly/standalone/configuration/mgmt-users.properties'
-+ target/wildfly/bin/jboss-cli.sh -c '--commands=xa-data-source add --name=batch_db --enabled=true --use-java-context=true --use-ccm=true --jndi-name=java:jboss/jsr352/batch_db --xa-datasource-properties={"URL"=>"jdbc:postgresql://localhost:5432/batch_db"} --driver-name=postgresql --password=123 --user-name=batch_user --same-rm-override=false --no-recovery=true, /subsystem=batch-jberet/jdbc-job-repository=batch_db:add(data-source=batch_db), /subsystem=batch-jberet/:write-attribute(name=default-job-repository,value=batch_db)'
-{"outcome" => "success"}
-{
-    "outcome" => "success",
-    "response-headers" => {
-        "operation-requires-reload" => true,
-        "process-state" => "reload-required"
-    }
-}
+podman run -it -e POSTGRES_PASSWORD=123 -e POSTGRES_USER=batch_user -e POSTGRES_DB=batch_db -p 5432:5432 postgres
 ```
+
+Then you need to enable the prostrgres profile. This can be done with `-Ppostgres` or `-Dpostgres`.
 
 Here's the console output of from the server:
 
