@@ -1,0 +1,2 @@
+/subsystem=batch-jberet/jdbc-job-repository=batch_db:add(data-source=PostgreSQLDS)
+/subsystem=batch-jberet/:write-attribute(name=default-job-repository,value=batch_db)

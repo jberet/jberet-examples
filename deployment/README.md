@@ -17,8 +17,12 @@ CREATE ROLE
 postgres=# create database batch_db owner batch_user;
 CREATE DATABASE
 ```
+## Using the Default PostgreSQL database as the job repository.
+
+The example project also provides the `postgresql-datasource` layer usage, which provides a default datasource called `PostgreSQLDS`, and this configuration method is commented in the `pom.xml`. If you want to use this set of configuration, you can comment out the `postgresql-driver` layer and uncomment the `postgresql-datasource` layer(and the relative `env` section that contains the database connection properties).
 
 ### Using Docker or Podman
+
 ```bash
 podman run -it -e POSTGRES_PASSWORD=123 -e POSTGRES_USER=batch_user -e POSTGRES_DB=batch_db -p 5432:5432 postgres
 ```
