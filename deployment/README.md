@@ -73,4 +73,10 @@ or:
 $ mvn wildfly:dev -Dpostgres-default-ds
 ```
 
+And your should see something like this from server log output:
+
+```txt
+17:53:27,739 INFO  [org.jboss.as.connector.subsystems.datasources] (MSC service thread 1-7) WFLYJCA0001: Bound data source [java:jboss/datasources/PostgreSQLDS]
+```
+
 By default, this example will run with the H2 database as its datasource.
