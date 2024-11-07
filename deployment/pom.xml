@@ -82,17 +82,27 @@
                 </configuration>
             </plugin>
             <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <testClassesDirectory>${project.build.testOutputDirectory}</testClassesDirectory>
+                    <includes>
+                        <include>**/*IT.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*IT.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
                 <version>${version.maven.wildfly.plugin}</version>
                 <configuration>
-                    <!--                    These environment variables are required if you are using the `postgresql-datasource` layer instead of the `postgresql-driver` layer in below.-->
-                    <!--                    <env>-->
-                    <!--                        <POSTGRESQL_DATABASE>batch_db</POSTGRESQL_DATABASE>-->
-                    <!--                        <POSTGRESQL_PASSWORD>123</POSTGRESQL_PASSWORD>-->
-                    <!--                        <POSTGRESQL_URL>jdbc:postgresql://localhost:5432/batch_db</POSTGRESQL_URL>-->
-                    <!--                        <POSTGRESQL_USER>batch_user</POSTGRESQL_USER>-->
-                    <!--                    </env>-->
                     <provisioning-dir>${jboss.home}</provisioning-dir>
                     <galleon-options>
                         <jboss-fork-embedded>${galleon.fork.embedded}</jboss-fork-embedded>
@@ -108,13 +118,10 @@
                         </feature-pack>
                     </feature-packs>
                     <layers>
-                        <!--                        The `postgresql-datasource` layer provides a `PostgreSQLDS` datasource by default.-->
-                        <!--                        <layer>postgresql-datasource</layer>-->
                         <layer>core-tools</layer>
                         <layer>batch-jberet</layer>
-                        <layer>h2-driver</layer>
                         <layer>jaxrs-server</layer>
-                        <layer>postgresql-driver</layer>
+                        <layer>h2-driver</layer>
                     </layers>
                     <channels>
                         <channel>
@@ -162,23 +169,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <configuration>
-                    <testClassesDirectory>${project.build.testOutputDirectory}</testClassesDirectory>
-                    <includes>
-                        <include>**/*IT.java</include>
-                    </includes>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>**/*IT.java</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
@@ -192,9 +182,174 @@
             </activation>
             <properties>
                 <configure.ds.script>${project.basedir}/add-postgresql-ds.cli</configure.ds.script>
-                <!--                Using this script instead with the `postgresql-datasource` layer-->
-                <!--                <configure.ds.script>${project.basedir}/add-postgresql-ds-default.cli</configure.ds.script>-->
             </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.wildfly.plugins</groupId>
+                        <artifactId>wildfly-maven-plugin</artifactId>
+                        <version>${version.maven.wildfly.plugin}</version>
+                        <configuration>
+                            <provisioning-dir>${jboss.home}</provisioning-dir>
+                            <galleon-options>
+                                <jboss-fork-embedded>${galleon.fork.embedded}</jboss-fork-embedded>
+                            </galleon-options>
+                            <feature-packs>
+                                <feature-pack>
+                                    <groupId>${server.test.feature.pack.groupId}</groupId>
+                                    <artifactId>${server.test.feature.pack.artifactId}</artifactId>
+                                    <version>${wildfly.version}</version>
+                                </feature-pack>
+                                <feature-pack>
+                                    <location>org.wildfly:wildfly-datasources-galleon-pack:8.0.1.Final</location>
+                                </feature-pack>
+                            </feature-packs>
+                            <layers>
+                                <layer>core-tools</layer>
+                                <layer>batch-jberet</layer>
+                                <layer>jaxrs-server</layer>
+                                <layer>postgresql-driver</layer>
+                            </layers>
+                            <channels>
+                                <channel>
+                                    <manifest>
+                                        <groupId>org.wildfly.channels</groupId>
+                                        <artifactId>wildfly-ee</artifactId>
+                                        <version>${wildfly.version}</version>
+                                    </manifest>
+                                </channel>
+                                <channel>
+                                    <manifest>
+                                        <groupId>org.jberet</groupId>
+                                        <artifactId>jberet-channel-manifest</artifactId>
+                                        <version>${version.jberet}</version>
+                                    </manifest>
+                                </channel>
+                            </channels>
+                            <scripts>
+                                <script>${configure.ds.script}</script>
+                            </scripts>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>server-provisioning</id>
+                                <phase>generate-test-resources</phase>
+                                <goals>
+                                    <goal>provision</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>wildfly-start</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                    <goal>execute-commands</goal>
+                                    <goal>deploy</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <phase>post-integration-test</phase>
+                                <id>wildfly-stop</id>
+                                <goals>
+                                    <goal>shutdown</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>postgres-default-ds</id>
+            <activation>
+                <property>
+                    <name>postgres-default-ds</name>
+                </property>
+            </activation>
+            <properties>
+                <configure.ds.script>${project.basedir}/add-postgresql-ds-default.cli</configure.ds.script>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.wildfly.plugins</groupId>
+                        <artifactId>wildfly-maven-plugin</artifactId>
+                        <version>${version.maven.wildfly.plugin}</version>
+                        <configuration>
+                            <env>
+                                <POSTGRESQL_DATABASE>batch_db</POSTGRESQL_DATABASE>
+                                <POSTGRESQL_PASSWORD>123</POSTGRESQL_PASSWORD>
+                                <POSTGRESQL_URL>jdbc:postgresql://localhost:5432/batch_db</POSTGRESQL_URL>
+                                <POSTGRESQL_USER>batch_user</POSTGRESQL_USER>
+                            </env>
+                            <provisioning-dir>${jboss.home}</provisioning-dir>
+                            <galleon-options>
+                                <jboss-fork-embedded>${galleon.fork.embedded}</jboss-fork-embedded>
+                            </galleon-options>
+                            <feature-packs>
+                                <feature-pack>
+                                    <groupId>${server.test.feature.pack.groupId}</groupId>
+                                    <artifactId>${server.test.feature.pack.artifactId}</artifactId>
+                                    <version>${wildfly.version}</version>
+                                </feature-pack>
+                                <feature-pack>
+                                    <location>org.wildfly:wildfly-datasources-galleon-pack:8.0.1.Final</location>
+                                </feature-pack>
+                            </feature-packs>
+                            <layers>
+                                <layer>postgresql-datasource</layer>
+                                <layer>core-tools</layer>
+                                <layer>batch-jberet</layer>
+                                <layer>jaxrs-server</layer>
+                            </layers>
+                            <channels>
+                                <channel>
+                                    <manifest>
+                                        <groupId>org.wildfly.channels</groupId>
+                                        <artifactId>wildfly-ee</artifactId>
+                                        <version>${wildfly.version}</version>
+                                    </manifest>
+                                </channel>
+                                <channel>
+                                    <manifest>
+                                        <groupId>org.jberet</groupId>
+                                        <artifactId>jberet-channel-manifest</artifactId>
+                                        <version>${version.jberet}</version>
+                                    </manifest>
+                                </channel>
+                            </channels>
+                            <scripts>
+                                <script>${configure.ds.script}</script>
+                            </scripts>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>server-provisioning</id>
+                                <phase>generate-test-resources</phase>
+                                <goals>
+                                    <goal>provision</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>wildfly-start</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                    <goal>execute-commands</goal>
+                                    <goal>deploy</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <phase>post-integration-test</phase>
+                                <id>wildfly-stop</id>
+                                <goals>
+                                    <goal>shutdown</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 </project>
