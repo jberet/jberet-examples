@@ -27,7 +27,7 @@ The example project also provides the `postgresql-datasource` layer usage, which
 podman run -it -e POSTGRES_PASSWORD=123 -e POSTGRES_USER=batch_user -e POSTGRES_DB=batch_db -p 5432:5432 postgres
 ```
 
-Then you need to enable the prostrgres profile. This can be done with `-Ppostgres` or `-Dpostgres`.
+Then you need to enable the postgres profile. This can be done with `-Ppostgres` or `-Dpostgres`.
 
 Here's the console output of from the server:
 
