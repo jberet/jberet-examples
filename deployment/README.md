@@ -17,9 +17,6 @@ CREATE ROLE
 postgres=# create database batch_db owner batch_user;
 CREATE DATABASE
 ```
-## Using the Default PostgreSQL database as the job repository.
-
-The example project also provides the `postgresql-datasource` layer usage, which provides a default datasource called `PostgreSQLDS`, and this configuration method is commented in the `pom.xml`. If you want to use this set of configuration, you can comment out the `postgresql-driver` layer and uncomment the `postgresql-datasource` layer(and the relative `env` section that contains the database connection properties).
 
 ### Using Docker or Podman
 
@@ -27,7 +24,18 @@ The example project also provides the `postgresql-datasource` layer usage, which
 podman run -it -e POSTGRES_PASSWORD=123 -e POSTGRES_USER=batch_user -e POSTGRES_DB=batch_db -p 5432:5432 postgres
 ```
 
-Then you need to enable the postgres profile. This can be done with `-Ppostgres` or `-Dpostgres`.
+Then you need to enable the `postgres` profile. This can be done with:
+
+```bash
+$ mvn wildfly:dev -Ppostgres
+```
+
+or:
+
+```bash
+$ mvn wildfly:dev -Dpostgres
+```
+
 
 Here's the console output of from the server:
 
@@ -50,3 +58,19 @@ batch_db=# \dt
  public | step_execution      | table | batch_user
 (4 rows)
 ```
+
+## Using the Default PostgreSQL database as the job repository.
+
+The example project also provides the `postgresql-datasource` layer usage, which provides a default datasource called `PostgreSQLDS`. To use this configuration method, you can run the example with:
+
+```bash
+$ mvn wildfly:dev -Ppostgres-default-ds
+```
+
+or:
+
+```bash
+$ mvn wildfly:dev -Dpostgres-default-ds
+```
+
+By default, this example will run with the H2 database as its datasource.
