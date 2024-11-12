@@ -86,13 +86,6 @@
                 <artifactId>wildfly-maven-plugin</artifactId>
                 <version>${version.maven.wildfly.plugin}</version>
                 <configuration>
-<!--                    These environment variables are required if you are using the `postgresql-datasource` instead of the `postgresql-driver` in below.-->
-<!--                    <env>-->
-<!--                        <POSTGRESQL_DATABASE>batch_db</POSTGRESQL_DATABASE>-->
-<!--                        <POSTGRESQL_PASSWORD>123</POSTGRESQL_PASSWORD>-->
-<!--                        <POSTGRESQL_URL>jdbc:postgresql://localhost:5432/batch_db</POSTGRESQL_URL>-->
-<!--                        <POSTGRESQL_USER>batch_user</POSTGRESQL_USER>-->
-<!--                    </env>-->
                     <provisioning-dir>${jboss.home}</provisioning-dir>
                     <galleon-options>
                         <jboss-fork-embedded>${galleon.fork.embedded}</jboss-fork-embedded>
@@ -108,13 +101,10 @@
                         </feature-pack>
                     </feature-packs>
                     <layers>
-                        <!--                        The `postgresql-datasource` layer provides a `PostgreSQLDS` datasource by default.-->
-                        <!--                        <layer>postgresql-datasource</layer>-->
                         <layer>core-tools</layer>
                         <layer>batch-jberet</layer>
                         <layer>h2-driver</layer>
                         <layer>jaxrs-server</layer>
-                        <layer>postgresql-driver</layer>
                     </layers>
                     <channels>
                         <channel>
@@ -193,6 +183,58 @@
             <properties>
                 <configure.ds.script>${project.basedir}/add-postgresql-ds.cli</configure.ds.script>
             </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.wildfly.plugins</groupId>
+                        <artifactId>wildfly-maven-plugin</artifactId>
+                        <configuration>
+                            <layers>
+                                <layer>core-tools</layer>
+                                <layer>batch-jberet</layer>
+                                <layer>jaxrs-server</layer>
+                                <layer>postgresql-driver</layer>
+                            </layers>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>postgres-ds</id>
+            <activation>
+                <property>
+                    <name>postgres.ds</name>
+                </property>
+            </activation>
+            <properties>
+                <configure.ds.script>${project.basedir}/enable-jdbc-job-repo.cli</configure.ds.script>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.wildfly.plugins</groupId>
+                        <artifactId>wildfly-maven-plugin</artifactId>
+                        <configuration>
+                            <!-- These environment variables are required if you are using the `postgresql-datasource` instead of the `postgresql-driver` in below.-->
+                            <env>
+                                <POSTGRESQL_JNDI>java:jboss/jsr352/batch_db</POSTGRESQL_JNDI>
+                                <POSTGRESQL_DATABASE>batch_db</POSTGRESQL_DATABASE>
+                                <POSTGRESQL_PASSWORD>123</POSTGRESQL_PASSWORD>
+                                <POSTGRESQL_URL>jdbc:postgresql://localhost:5432/batch_db</POSTGRESQL_URL>
+                                <POSTGRESQL_USER>batch_user</POSTGRESQL_USER>
+                            </env>
+                            <layers>
+                                <!-- The `postgresql-datasource` layer provides a `PostgreSQLDS` datasource by default.-->
+                                <layer>postgresql-datasource</layer>
+                                <layer>core-tools</layer>
+                                <layer>batch-jberet</layer>
+                                <layer>jaxrs-server</layer>
+                            </layers>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 </project>
