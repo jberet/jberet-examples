@@ -23,7 +23,7 @@ CREATE DATABASE
 podman run -it -e POSTGRES_PASSWORD=123 -e POSTGRES_USER=batch_user -e POSTGRES_DB=batch_db -p 5432:5432 postgres
 ```
 
-Then you need to enable the prostgres profile. This can be done with `-Ppostgres` or `-Dpostgres`.
+Then you need to enable the `postgres` profile. This can be done with `-Ppostgres` or `-Dpostgres`.
 
 ```bash
 $ mvn wildfly:dev -Ppostgres
