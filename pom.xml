@@ -27,7 +27,7 @@
         <version.jandex>3.2.3</version.jandex>
         <version.jberet-jpa>2.1.4.Final</version.jberet-jpa>
         <version.jberet.support>2.1.2.Final</version.jberet.support>
-        <version.jberet>3.0.0.Final</version.jberet>
+        <version.jberet>3.1.0.Final</version.jberet>
         <version.junit>5.11.3</version.junit>
         <version.narayana>7.1.0.Final</version.narayana>
         <version.org.hibernate>6.6.3.Final</version.org.hibernate>
