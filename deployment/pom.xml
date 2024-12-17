@@ -23,7 +23,7 @@
         <resteasy.ver>6.2.11.Final</resteasy.ver>
         <server.test.feature.pack.artifactId>wildfly-ee-galleon-pack</server.test.feature.pack.artifactId>
         <server.test.feature.pack.groupId>org.wildfly</server.test.feature.pack.groupId>
-        <version.maven.wildfly.plugin>5.0.1.Final</version.maven.wildfly.plugin>
+        <version.maven.wildfly.plugin>5.1.0.Final</version.maven.wildfly.plugin>
         <version.rest-assured>5.5.0</version.rest-assured>
         <!-- Leave this blank to always use the latest version of WildFly -->
         <wildfly.version/>
