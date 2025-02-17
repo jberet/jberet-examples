@@ -24,7 +24,7 @@
         <server.test.feature.pack.artifactId>wildfly-ee-galleon-pack</server.test.feature.pack.artifactId>
         <server.test.feature.pack.groupId>org.wildfly</server.test.feature.pack.groupId>
         <version.maven.wildfly.plugin>5.1.2.Final</version.maven.wildfly.plugin>
-        <version.rest-assured>5.5.0</version.rest-assured>
+        <version.rest-assured>5.5.1</version.rest-assured>
         <!-- Leave this blank to always use the latest version of WildFly -->
         <wildfly.version/>
         <configure.ds.script>${project.basedir}/add-h2-ds.cli</configure.ds.script>
