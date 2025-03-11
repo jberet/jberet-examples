@@ -20,7 +20,7 @@
         <galleon.fork.embedded>true</galleon.fork.embedded>
         <jakarta.servlet.ver>6.1.0</jakarta.servlet.ver>
         <jboss.home>${project.build.directory}${file.separator}wildfly</jboss.home>
-        <resteasy.ver>6.2.11.Final</resteasy.ver>
+        <resteasy.ver>6.2.12.Final</resteasy.ver>
         <server.test.feature.pack.artifactId>wildfly-ee-galleon-pack</server.test.feature.pack.artifactId>
         <server.test.feature.pack.groupId>org.wildfly</server.test.feature.pack.groupId>
         <version.maven.wildfly.plugin>5.1.2.Final</version.maven.wildfly.plugin>
