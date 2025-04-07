@@ -24,7 +24,7 @@
         <version.jakarta.batch-api>2.1.1</version.jakarta.batch-api>
         <version.jakarta.persistence>3.2.0</version.jakarta.persistence>
         <version.jakarta.validation-api>3.0.2</version.jakarta.validation-api>
-        <version.jandex>3.2.7</version.jandex>
+        <version.jandex>3.3.0</version.jandex>
         <version.jberet-jpa>2.1.4.Final</version.jberet-jpa>
         <version.jberet.support>2.1.2.Final</version.jberet.support>
         <version.jberet>3.1.0.Final</version.jberet>
