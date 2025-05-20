@@ -32,7 +32,7 @@
         <version.narayana>7.2.2.Final</version.narayana>
         <version.org.hibernate>6.6.14.Final</version.org.hibernate>
         <version.org.jboss.weld.weld-se>6.0.2.Final</version.org.jboss.weld.weld-se>
-        <version.weld>6.0.2.Final</version.weld>
+        <version.weld>6.0.3.Final</version.weld>
     </properties>
 
     <modules>
