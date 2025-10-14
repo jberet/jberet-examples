@@ -19,7 +19,7 @@
 
     <properties>
         <version.com.fasterxml.jackson>2.16.0</version.com.fasterxml.jackson>
-        <version.com.h2database>2.3.232</version.com.h2database>
+        <version.com.h2database>2.4.240</version.com.h2database>
         <version.jakarta-transaction-api>2.0.1</version.jakarta-transaction-api>
         <version.jakarta.batch-api>2.1.1</version.jakarta.batch-api>
         <version.jakarta.persistence>3.2.0</version.jakarta.persistence>
